@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+      integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+      crossorigin="anonymous"
+    />
+    <style>
+      * {
+        border: 0px solid red;
+      }
+    </style>
+    <title>Document</title>
+  </head>
+  <body class="text-center">
+    <div class="container bg-light p-5 w-75 mt-5">
+      <img
+        src="https://upload.wikimedia.org/wikipedia/en/0/08/Square_9_Softworks_Logo.png"
+        alt=""
+        class="img-fluid p-5"
+      />
+      <h1 class="display-4 fw-bold bg-secondary text-light p-2">
+        Number of cases in the current queue is:
+      </h1>
+      <h1 class="display-4 fw-bold bg-white p-5" id="queueCount">...</h1>
+      <a
+        class="btn btn-secondary btn-lg btn-block"
+        href="https://na156.lightning.force.com/lightning/o/Case/list?filterName=00Ba0000009EPpsEAG"
+        role="button"
+        target="_blank"
+        >Open SalesForce</a
+      >
+    </div>
+
+    <script>
+      const url = "https://queue.square-9.com/data/support-page.json";
+      let audio = new Audio("diablo_portal_sound.mp3");
+      let lastCount = 0;
+
+      setInterval(function () {
+        axios.get(url).then((response) => {
+          let currentCount = response.data.currentQueueCountiOS;
+          document.getElementById("queueCount").innerHTML = currentCount;
+          if (currentCount > lastCount) {
+            console.log(`New case in queue, current count is: ${currentCount}`);
+            //audio.play();
+            lastCount = currentCount;
+          } else {
+            console.log(`No new cases in queue checking again in 5 seconds`);
+          }
+        });
+      }, 5000);
+    </script>
+  </body>
+</html>
