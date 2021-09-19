@@ -49,7 +49,7 @@
           document.getElementById("queueCount").innerHTML = currentCount;
           if (currentCount > lastCount) {
             console.log(`New case in queue, current count is: ${currentCount}`);
-            //audio.play();
+            audio.play();
             lastCount = currentCount;
           } else {
             console.log(`No new cases in queue checking again in 5 seconds`);
