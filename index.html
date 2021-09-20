@@ -11,12 +11,8 @@
       integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
       crossorigin="anonymous"
     />
-    <style>
-      * {
-        border: 0px solid red;
-      }
-    </style>
-    <title>Document</title>
+    <title>S9 Notification Tracker</title>
+    <link rel="shortcut icon" type="image/jpg" href="icon.png" />
   </head>
   <body class="text-center">
     <div class="container bg-light p-5 w-75 mt-5">
@@ -25,12 +21,23 @@
         alt=""
         class="img-fluid p-5"
       />
-      <h1 class="display-4 fw-bold bg-secondary text-light p-2">
+      <h1
+        class="display-4 fw-bold bg-secondary text-light p-2 d-none"
+        id="header"
+      >
         Number of cases in the current queue is:
       </h1>
-      <h1 class="display-4 fw-bold bg-white p-5" id="queueCount">...</h1>
-      <a
+      <h1 class="display-4 fw-bold bg-white p-5 d-none" id="queueCount">...</h1>
+      <button
+        type="button"
+        id="showEl"
         class="btn btn-secondary btn-lg btn-block"
+        onclick="showHidden()"
+      >
+        Start
+      </button>
+      <a
+        class="btn btn-secondary btn-lg btn-block d-none"
         href="https://na156.lightning.force.com/lightning/o/Case/list?filterName=00Ba0000009EPpsEAG"
         role="button"
         target="_blank"
@@ -43,19 +50,26 @@
       let audio = new Audio("coin.mp3");
       let lastCount = 0;
 
-      setInterval(function () {
-        axios.get(url).then((response) => {
-          let currentCount = response.data.currentQueueCountiOS;
-          document.getElementById("queueCount").innerHTML = currentCount;
-          if (currentCount > lastCount) {
-            console.log(`New case in queue, current count is: ${currentCount}`);
-            audio.play();
-            lastCount = currentCount;
-          } else {
-            console.log(`No new cases in queue checking again in 5 seconds`);
-          }
-        });
-      }, 5000);
+      function showHidden() {
+        document.getElementById("queueCount").classList.remove("d-none");
+        document.getElementById("header").classList.remove("d-none");
+        document.getElementById("showEl").classList.add("d-none");
+        setInterval(function () {
+          axios.get(url).then((response) => {
+            let currentCount = response.data.currentQueueCountiOS;
+            document.getElementById("queueCount").innerHTML = currentCount;
+            if (currentCount > lastCount) {
+              console.log(
+                `New case in queue, current count is: ${currentCount}`
+              );
+              audio.play();
+              lastCount = currentCount;
+            } else {
+              console.log(`No new cases in queue checking again in 5 seconds`);
+            }
+          });
+        }, 5000);
+      }
     </script>
   </body>
 </html>
